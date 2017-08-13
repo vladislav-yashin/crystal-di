@@ -1,4 +1,5 @@
 # Lightweight DI Container for Crystal
+[![Build Status](https://travis-ci.org/funk-yourself/crystal-di.svg?branch=master)](https://travis-ci.org/funk-yourself/crystal-di)
 
 ![alt text](http://imgur.com/GQ3lD0m.png "Crystal-DI")
 
