@@ -3,7 +3,7 @@
 
 ![alt text](http://imgur.com/GQ3lD0m.png "Crystal-DI")
 
-Crystal-DI is a flexible DI-container with simple DSL, auto-injection, memoization, lazy evaluation and contextual bindings
+Crystal-DI is a flexible DI-container with simple DSL, auto-injection, memoization, lazy evaluation and contextual bindings.
 
 ## Installation
 
@@ -22,7 +22,7 @@ It's as simple as:
 require "di"
 
 module Container # may be a class as well
-  include DI::Container
+  include DI::ContainerMixin
 
   register Foo, Foo.new
 end
@@ -46,7 +46,7 @@ end
 
 ```crystal
 module Container
-  include DI::Container
+  include DI::ContainerMixin
 
   register AppService, AppService.new
 end
