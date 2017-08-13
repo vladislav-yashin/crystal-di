@@ -1,6 +1,8 @@
-# crystal_di
+# Lightweight DI Container for Crystal
 
-TODO: Write a description here
+![alt text](http://imgur.com/GQ3lD0m.png "Crystal-DI")
+
+Crystal-DI is a flexible DI-container with simple DSL, auto-injection, memoization, lazy evaluation and contextual bindings
 
 ## Installation
 
@@ -8,25 +10,132 @@ Add this to your application's `shard.yml`:
 
 ```yaml
 dependencies:
-  crystal_di:
-    github: funkthis/crystal_di
+  di:
+    github: funk-yourself/crystal-di
 ```
 
 ## Usage
 
+It's as simple as:
 ```crystal
-require "crystal_di"
+require "di"
+
+module Container # may be a class as well
+  include DI::Container
+
+  register Foo, Foo.new
+end
+
+Container.resolve(Foo)
 ```
 
-TODO: Write usage instructions here
+You can also use blocks:
+
+```Crystal
+register Bar, Bar.new
+
+register Foo do
+  logger = Logger.new(STDOUT)
+  logger.level = Logger::WARN
+  Foo.new(resolve(Bar), logger)
+end
+```
+
+## Auto-injection
+
+```crystal
+module Container
+  include DI::Container
+
+  register AppService, AppService.new
+end
+
+class AppService
+end
+
+class Controller
+  include DI::AutoInject(Container)
+
+  def initialize(@app_service : AppService)
+    p @app_service
+  end
+end
+
+Controller.new
+```
+
+## Memoization
+Sometimes you need to be sure that there's only one instance of some service. You can achieve that with *memoize* option:
+
+```Crystal
+# Will be evaluated only one time
+register AppService, AppService.new, memoize: true
+```
+
+## Contextual bindings
+You can bind container items to any class with *context* option:
+
+```Crystal
+register AppService, AppService.new, context: Controller
+```
+
+It means that you can resolve this item by calling
+
+```Crystal
+Container.resolve(AppService, context: Controller)
+```
+
+But the main purpose is ability to auto-inject different implementations of abstract class/interface into different classes:
+
+```Crystal
+require "./src/di.cr"
+
+module Container
+  include DI::ContainerMixin
+  register Storage, RedisStorage.new, context: UsersController
+  register Storage, MemcachedStorage.new, context: PostsController
+end
+
+abstract class Storage
+end
+
+class RedisStorage < Storage
+end
+
+class MemcachedStorage < Storage
+end
+
+class UsersController
+  include DI::AutoInject(Container)
+
+  def initialize(@storage : Storage)
+    p @storage
+  end
+end
+
+class PostsController
+  include DI::AutoInject(Container)
+
+  def initialize(@storage : Storage)
+    p @storage
+  end
+end
+
+UsersController.new # will print RedisStorage
+PostsController.new # will print MemcachedStorage
+```
+
 
 ## Development
 
-TODO: Write development instructions here
+Run tests:
+```
+crystal spec
+```
 
 ## Contributing
 
-1. Fork it ( https://github.com/funkthis/crystal_di/fork )
+1. Fork it ( https://github.com/funk-yourself/crystal-di/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
@@ -34,4 +143,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [[your-github-name]](https://github.com/funkthis)  - creator, maintainer
+- [funk-yourself](https://github.com/funkthis) (Vladislav Yashin)  - creator, maintainer
