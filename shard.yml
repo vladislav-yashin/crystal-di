@@ -1,8 +1,8 @@
-name: crystal_di
+name: di
 version: 0.1.0
 
 authors:
-  -  <>
+  -  Vladislav Yashin
 
 crystal: 0.23.1
 
