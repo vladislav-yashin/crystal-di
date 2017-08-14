@@ -13,6 +13,7 @@ Add this to your application's `shard.yml`:
 dependencies:
   di:
     github: funk-yourself/crystal-di
+    version: ~> 0.1.0
 ```
 
 ## Usage
