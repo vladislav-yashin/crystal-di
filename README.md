@@ -90,7 +90,7 @@ Container.resolve(AppService, context: Controller)
 But the main purpose is ability to auto-inject different implementations of abstract class/interface into different classes:
 
 ```Crystal
-require "./src/di.cr"
+require "di"
 
 module Container
   include DI::ContainerMixin
