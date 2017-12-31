@@ -5,7 +5,7 @@ module DI::ContainerMixin
     end
 
     macro register(type, context = "", memoize = false, &block)
-      add_resolve_method(\{{type}}, ->{ \{{yield}} }.call, \{{context}}, \{{memoize}})
+      add_resolve_method(\{{type}}, \{{yield}}, \{{context}}, \{{memoize}})
     end
 
     private macro add_resolve_method(type, value, context, memoize)
