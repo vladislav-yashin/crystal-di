@@ -6,7 +6,9 @@ describe DI::ContainerMixin do
   end
 
   it "resolves proper instance by block" do
-    Container.resolve(BlockFoo).class.should eq(BlockFoo)
+    instance = Container.resolve(BlockFoo)
+    instance.class.should eq(BlockFoo)
+    instance.should_not eq(Container.resolve(BlockFoo))
   end
 
   it "memoizes instance when memoize: true" do
