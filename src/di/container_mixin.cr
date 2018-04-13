@@ -9,6 +9,8 @@ module DI::ContainerMixin
     end
 
     private macro add_resolve_method(type, value, context, memoize)
+      @@\{{(type.id + "__mutex__" + context.id.stringify).gsub(/:/, "_").underscore}} = Mutex.new
+
       def self.resolve(type : \{{type}}.class,
         \{% if context == "" %}
           context = nil
@@ -17,7 +19,7 @@ module DI::ContainerMixin
         \{% end %}
       )
         \{% if memoize %}
-          Mutex.new.synchronize do
+          @@\{{(type.id + "__mutex__" + context.id.stringify).gsub(/:/, "_").underscore}}.synchronize do
             @@\{{(type.id + "__" + context.id.stringify).gsub(/:/, "_").underscore}} ||= \{{value}}.as(\{{type}})
           end
         \{% else %}
