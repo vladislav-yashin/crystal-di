@@ -1,9 +1,9 @@
 name: di
-version: 0.2.0
+version: 0.2.1
 
 authors:
   -  Vladislav Yashin
 
-crystal: 0.24.1
+crystal: 0.24.2
 
 license: MIT
